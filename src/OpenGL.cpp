@@ -163,6 +163,7 @@ void OGL_InitStates()
 
 ///// paulscode, fixes missing graphics on Qualcomm, Adreno:
     glDepthRangef(0.0f, 1.0f);
+    glPolygonOffset(-0.2f, -0.2f);
 /*
     // default values (only seem to work on OMAP!)
     glPolygonOffset(0.2f, 0.2f);
