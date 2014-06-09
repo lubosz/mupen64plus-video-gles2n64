@@ -154,6 +154,7 @@ u32 __indexmap_getnew(u32 index, u32 num)
 
 void gSPTriangle(s32 v0, s32 v1, s32 v2)
 {
+#ifndef FAKE_RENDERING
     if ((v0 < INDEXMAP_SIZE) && (v1 < INDEXMAP_SIZE) && (v2 < INDEXMAP_SIZE))
     {
 
@@ -181,6 +182,7 @@ void gSPTriangle(s32 v0, s32 v1, s32 v2)
     if (depthBuffer.current) depthBuffer.current->cleared = FALSE;
     gDP.colorImage.changed = TRUE;
     gDP.colorImage.height = (unsigned int)(max( gDP.colorImage.height, gDP.scissor.lry ));
+#endif /* !FAKE_RENDERING */
 }
 
 void gSP1Triangle( const s32 v0, const s32 v1, const s32 v2)
@@ -223,6 +225,7 @@ f32 identityMatrix[4][4] =
 #ifdef __VEC4_OPT
 static void gSPTransformVertex4_default(u32 v, float mtx[4][4])
 {
+#ifndef FAKE_RENDERING
     float x, y, z, w;
     int i;
     for(i = 0; i < 4; i++)
@@ -236,10 +239,12 @@ static void gSPTransformVertex4_default(u32 v, float mtx[4][4])
         OGL.triangles.vertices[v+i].z = x * mtx[0][2] + y * mtx[1][2] + z * mtx[2][2] + mtx[3][2];
         OGL.triangles.vertices[v+i].w = x * mtx[0][3] + y * mtx[1][3] + z * mtx[2][3] + mtx[3][3];
     }
+#endif /* !FAKE_RENDERING */
 }
 
 void gSPClipVertex4(u32 v)
 {
+#ifndef FAKE_RENDERING
     int i;
     for(i = 0; i < 4; i++){
         SPVertex *vtx = &OGL.triangles.vertices[v+i];
@@ -249,10 +254,12 @@ void gSPClipVertex4(u32 v)
         if (vtx->y > +vtx->w)   vtx->clip |= CLIP_POSY;
         if (vtx->y < -vtx->w)   vtx->clip |= CLIP_NEGY;
     }
+#endif /* !FAKE_RENDERING */
 }
 
 static void gSPTransformNormal4_default(u32 v, float mtx[4][4])
 {
+#ifndef FAKE_RENDERING
     float len, x, y, z;
     int i;
     for(i = 0; i < 4; i++){
@@ -274,10 +281,12 @@ static void gSPTransformNormal4_default(u32 v, float mtx[4][4])
             OGL.triangles.vertices[v+i].nz /= len;
         }
     }
+#endif /* !FAKE_RENDERING */
 }
 
 static void gSPLightVertex4_default(u32 v)
 {
+#ifndef FAKE_RENDERING
     gSPTransformNormal4(v, gSP.matrix.modelView[gSP.matrix.modelViewi]);
     for(int j = 0; j < 4; j++)
     {
@@ -306,11 +315,12 @@ static void gSPLightVertex4_default(u32 v)
         OGL.triangles.vertices[v+j].g = min(1.0f, g);
         OGL.triangles.vertices[v+j].b = min(1.0f, b);
     }
+#endif /* !FAKE_RENDERING */
 }
 
 static void gSPBillboardVertex4_default(u32 v)
 {
-
+#ifndef FAKE_RENDERING
     int i = 0;
 #ifdef __TRIBUFFER_OPT
     i = OGL.triangles.indexmap[0];
@@ -332,6 +342,7 @@ static void gSPBillboardVertex4_default(u32 v)
     OGL.triangles.vertices[v+3].y += OGL.triangles.vertices[i].y;
     OGL.triangles.vertices[v+3].z += OGL.triangles.vertices[i].z;
     OGL.triangles.vertices[v+3].w += OGL.triangles.vertices[i].w;
+#endif /* !FAKE_RENDERING */
 }
 
 void gSPProcessVertex4(u32 v)
@@ -339,6 +350,7 @@ void gSPProcessVertex4(u32 v)
     if (gSP.changed & CHANGED_MATRIX)
         gSPCombineMatrices();
 
+#ifndef FAKE_RENDERING
     gSPTransformVertex4(v, gSP.matrix.combined );
 
     if (config.screen.flipVertical)
@@ -420,11 +432,13 @@ void gSPProcessVertex4(u32 v)
     }
 
     if (config.enableClipping) gSPClipVertex4(v);
+#endif /* !FAKE_RENDERING */
 }
 #endif
 
 void gSPClipVertex(u32 v)
 {
+#ifndef FAKE_RENDERING
     SPVertex *vtx = &OGL.triangles.vertices[v];
     vtx->clip = 0;
     if (vtx->x > +vtx->w)   vtx->clip |= CLIP_POSX;
@@ -432,6 +446,7 @@ void gSPClipVertex(u32 v)
     if (vtx->y > +vtx->w)   vtx->clip |= CLIP_POSY;
     if (vtx->y < -vtx->w)   vtx->clip |= CLIP_NEGY;
     //if (vtx->w < 0.1f)      vtx->clip |= CLIP_NEGW;
+#endif /* !FAKE_RENDERING */
 }
 
 static void gSPTransformVertex_default(float vtx[4], float mtx[4][4])
@@ -471,15 +486,19 @@ static void gSPLightVertex_default(u32 v)
 
 static void gSPBillboardVertex_default(u32 v, u32 i)
 {
+#ifndef FAKE_RENDERING
     OGL.triangles.vertices[v].x += OGL.triangles.vertices[i].x;
     OGL.triangles.vertices[v].y += OGL.triangles.vertices[i].y;
     OGL.triangles.vertices[v].z += OGL.triangles.vertices[i].z;
     OGL.triangles.vertices[v].w += OGL.triangles.vertices[i].w;
+#endif /* !FAKE_RENDERING */
 }
 
 void gSPCombineMatrices()
 {
+#ifndef FAKE_RENDERING
     MultMatrix(gSP.matrix.projection, gSP.matrix.modelView[gSP.matrix.modelViewi], gSP.matrix.combined);
+#endif /* !FAKE_RENDERING */
     gSP.changed &= ~CHANGED_MATRIX;
 }
 
@@ -491,6 +510,7 @@ void gSPProcessVertex( u32 v )
     if (gSP.changed & CHANGED_MATRIX)
         gSPCombineMatrices();
 
+#ifndef FAKE_RENDERING
     gSPTransformVertex( &OGL.triangles.vertices[v].x, gSP.matrix.combined );
 
     if (config.screen.flipVertical)
@@ -550,6 +570,7 @@ void gSPProcessVertex( u32 v )
             }
         }
     }
+#endif /* !FAKE_RENDERING */
 }
 
 
@@ -594,6 +615,7 @@ void gSPTriangleUnknown()
 
 void gSPMatrix( u32 matrix, u8 param )
 {
+#ifndef FAKE_RENDERING
 #ifdef __TRIBUFFER_OPT
     gSPFlushTriangles();
 #endif
@@ -627,12 +649,14 @@ void gSPMatrix( u32 matrix, u8 param )
         else
             MultMatrix2( gSP.matrix.modelView[gSP.matrix.modelViewi], mtx );
     }
+#endif /* !FAKE_RENDERING */
 
     gSP.changed |= CHANGED_MATRIX;
 }
 
 void gSPDMAMatrix( u32 matrix, u8 index, u8 multiply )
 {
+#ifndef FAKE_RENDERING
     f32 mtx[4][4];
     u32 address = gSP.DMAOffsets.mtx + RSP_SegmentToPhysical( matrix );
 
@@ -655,11 +679,13 @@ void gSPDMAMatrix( u32 matrix, u8 index, u8 multiply )
         CopyMatrix( gSP.matrix.modelView[gSP.matrix.modelViewi], mtx );
 
     CopyMatrix( gSP.matrix.projection, identityMatrix );
+#endif /* !FAKE_RENDERING */
     gSP.changed |= CHANGED_MATRIX;
 }
 
 void gSPViewport( u32 v )
 {
+#ifndef FAKE_RENDERING
     u32 address = RSP_SegmentToPhysical( v );
 
     if ((address + 16) > RDRAMSize)
@@ -686,12 +712,14 @@ void gSPViewport( u32 v )
     gSP.viewport.height = gSP.viewport.vscale[1] * 2;
     gSP.viewport.nearz  = gSP.viewport.vtrans[2] - gSP.viewport.vscale[2];
     gSP.viewport.farz   = (gSP.viewport.vtrans[2] + gSP.viewport.vscale[2]) ;
+#endif /* !FAKE_RENDERING */
 
     gSP.changed |= CHANGED_VIEWPORT;
 }
 
 void gSPForceMatrix( u32 mptr )
 {
+#ifndef FAKE_RENDERING
     u32 address = RSP_SegmentToPhysical( mptr );
 
     if (address + 64 > RDRAMSize)
@@ -700,12 +728,14 @@ void gSPForceMatrix( u32 mptr )
     }
 
     RSP_LoadMatrix( gSP.matrix.combined, RSP_SegmentToPhysical( mptr ) );
+#endif
 
     gSP.changed &= ~CHANGED_MATRIX;
 }
 
 void gSPLight( u32 l, s32 n )
 {
+#ifndef FAKE_RENDERING
     n--;
     if (n >= 8)
         return;
@@ -740,6 +770,7 @@ void gSPLight( u32 l, s32 n )
         gSP.lights[n].z = light->z;
     }
     Normalize(&gSP.lights[n].x);
+#endif /* !FAKE_RENDERING */
 }
 
 void gSPLookAt( u32 l )
@@ -748,6 +779,7 @@ void gSPLookAt( u32 l )
 
 void gSPVertex( u32 v, u32 n, u32 v0 )
 {
+#ifndef FAKE_RENDERING
     //flush batched triangles:
 #ifdef __TRIBUFFER_OPT
     gSPFlushTriangles();
@@ -832,12 +864,12 @@ void gSPVertex( u32 v, u32 n, u32 v0 )
     {
         LOG(LOG_ERROR, "Using Vertex outside buffer v0=%i, n=%i\n", v0, n);
     }
-
+#endif /* !FAKE_RENDERING */
 }
 
 void gSPCIVertex( u32 v, u32 n, u32 v0 )
 {
-
+#ifndef FAKE_RENDERING
 #ifdef __TRIBUFFER_OPT
     gSPFlushTriangles();
 #endif
@@ -925,7 +957,7 @@ void gSPCIVertex( u32 v, u32 n, u32 v0 )
     {
         LOG(LOG_ERROR, "Using Vertex outside buffer v0=%i, n=%i\n", v0, n);
     }
-
+#endif /* !FAKE_RENDERING */
 }
 
 void gSPDMAVertex( u32 v, u32 n, u32 v0 )

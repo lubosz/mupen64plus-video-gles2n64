@@ -167,5 +167,228 @@ void OGL_ReadScreen( void *dest, int *width, int *height );
 
 int  OGL_CheckError();
 int  OGL_IsExtSupported( const char *extension );
+
+#ifdef FAKE_RENDERING
+
+#define glTexImage2D fake_glTexImage2D
+static void fake_glTexImage2D(GLenum target, GLint level, GLint internalFormat,
+                              GLsizei width, GLsizei height, GLint border,
+                              GLenum format, GLenum type, const GLvoid * data)
+            __attribute__((used));
+
+static void fake_glTexImage2D(GLenum target, GLint level, GLint internalFormat,
+                              GLsizei width, GLsizei height, GLint border,
+                              GLenum format, GLenum type, const GLvoid * data)
+{
+}
+
+#define glDrawElements fake_glDrawElements
+static void fake_glDrawElements(GLenum mode, GLsizei count, GLenum type,
+                                const GLvoid * indices)
+            __attribute__((used));
+
+static void fake_glDrawElements(GLenum mode, GLsizei count, GLenum type,
+                                const GLvoid * indices)
+{
+}
+
+#define glDrawArrays fake_glDrawArrays
+static void fake_glDrawArrays(GLenum mode, GLint first, GLsizei count)
+            __attribute__((used));
+
+static void fake_glDrawArrays(GLenum mode, GLint first, GLsizei count)
+{
+}
+
+#define glUniform1f fake_glUniform1f
+static void fake_glUniform1f(GLint location, GLfloat v0)
+            __attribute__((used));
+
+static void fake_glUniform1f(GLint location, GLfloat v0)
+{
+}
+
+#define glUniform2f fake_glUniform2f
+static void fake_glUniform2f(GLint location, GLfloat v0, GLfloat v1)
+            __attribute__((used));
+
+static void fake_glUniform2f(GLint location, GLfloat v0, GLfloat v1)
+{
+}
+
+#define glUniform1i fake_glUniform1i
+static void fake_glUniform1i(GLint location, GLint v0)
+            __attribute__((used));
+
+static void fake_glUniform1i(GLint location, GLint v0)
+{
+}
+
+#define glUniform2i fake_glUniform2i
+static void fake_glUniform2i(GLint location, GLint v0, GLint v1)
+            __attribute__((used));
+
+static void fake_glUniform2i(GLint location, GLint v0, GLint v1)
+{
+}
+
+#define glUniform4fv fake_glUniform4fv
+static void fake_glUniform4fv(GLint location, GLsizei count,
+                              const GLfloat *value)
+            __attribute__((used));
+
+static void fake_glUniform4fv(GLint location, GLsizei count,
+                              const GLfloat *value)
+{
+}
+
+#define glTexParameteri fake_glTexParameteri
+static void fake_glTexParameteri(GLenum target, GLenum pname, GLint param)
+            __attribute__((used));
+
+static void fake_glTexParameteri(GLenum target, GLenum pname, GLint param)
+{
+}
+
+#define glEnable fake_glEnable
+static void fake_glEnable(GLenum cap)
+            __attribute__((used));
+
+static void fake_glEnable(GLenum cap)
+{
+}
+
+#define glDisable fake_glDisable
+static void fake_glDisable(GLenum cap)
+            __attribute__((used));
+
+static void fake_glDisable(GLenum cap)
+{
+}
+
+#define glActiveTexture fake_glActiveTexture
+static void fake_glActiveTexture(GLenum texunit)
+            __attribute__((used));
+
+static void fake_glActiveTexture(GLenum texunit)
+{
+}
+
+#define glBindTexture fake_glBindTexture
+static void fake_glBindTexture(GLenum texunit, GLuint texture)
+            __attribute__((used));
+
+static void fake_glBindTexture(GLenum texunit, GLuint texture)
+{
+}
+
+#define glDepthFunc fake_glDepthFunc
+static void fake_glDepthFunc(GLenum func)
+            __attribute__((used));
+
+static void fake_glDepthFunc(GLenum func)
+{
+}
+
+#define glDepthMask fake_glDepthMask
+static void fake_glDepthMask(GLboolean flag)
+            __attribute__((used));
+
+static void fake_glDepthMask(GLboolean flag)
+{
+}
+
+#define glUseProgram fake_glUseProgram
+static void fake_glUseProgram(GLuint program)
+            __attribute__((used));
+
+static void fake_glUseProgram(GLuint program)
+{
+}
+
+#define glClearDepthf fake_glClearDepthf
+static void fake_glClearDepthf(GLclampf depth)
+            __attribute__((used));
+
+static void fake_glClearDepthf(GLclampf depth)
+{
+}
+
+#define glClearColor fake_glClearColor
+static void fake_glClearColor(GLclampf r, GLclampf g, GLclampf b, GLclampf a)
+            __attribute__((used));
+
+static void fake_glClearColor(GLclampf r, GLclampf g, GLclampf b, GLclampf a)
+{
+}
+
+#define glClear fake_glClear
+static void fake_glClear(GLbitfield mask)
+            __attribute__((used));
+
+static void fake_glClear(GLbitfield mask)
+{
+}
+
+#define glViewport fake_glViewport
+static void fake_glViewport(GLint x, GLint y, GLsizei width, GLsizei height)
+            __attribute__((used));
+
+static void fake_glViewport(GLint x, GLint y, GLsizei width, GLsizei height)
+{
+}
+
+#define glScissor fake_glScissor
+static void fake_glScissor(GLint x, GLint y, GLsizei width, GLsizei height)
+            __attribute__((used));
+
+static void fake_glScissor(GLint x, GLint y, GLsizei width, GLsizei height)
+{
+}
+
+#define glBlendFunc fake_glBlendFunc
+static void fake_glBlendFunc(GLenum sfactor, GLenum dfactor)
+            __attribute__((used));
+
+static void fake_glBlendFunc(GLenum sfactor, GLenum dfactor)
+{
+}
+
+#define glEnableVertexAttribArray fake_glEnableVertexAttribArray
+static void fake_glEnableVertexAttribArray(GLuint index)
+            __attribute__((used));
+
+static void fake_glEnableVertexAttribArray(GLuint index)
+{
+}
+
+#define glDisableVertexAttribArray fake_glDisableVertexAttribArray
+static void fake_glDisableVertexAttribArray(GLuint index)
+            __attribute__((used));
+
+static void fake_glDisableVertexAttribArray(GLuint index)
+{
+}
+
+#define glVertexAttrib4f fake_glVertexAttrib4f
+static void fake_glVertexAttrib4f(GLuint index, GLfloat v0, GLfloat v1,
+                                  GLfloat v2, GLfloat v3)
+            __attribute__((used));
+
+static void fake_glVertexAttrib4f(GLuint index, GLfloat v0, GLfloat v1,
+                                  GLfloat v2, GLfloat v3)
+{
+}
+
+#define glVertexAttrib4fv fake_glVertexAttrib4fv
+static void fake_glVertexAttrib4fv(GLuint index, const GLfloat *v)
+            __attribute__((used));
+
+static void fake_glVertexAttrib4fv(GLuint index, const GLfloat *v)
+{
+}
+
+#endif /* FAKE_RENDERING */
+
 #endif
 
