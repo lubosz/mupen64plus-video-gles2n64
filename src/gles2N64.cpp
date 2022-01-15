@@ -1,6 +1,7 @@
 
 #include <dlfcn.h>
 #include <string.h>
+#include <cmath>
 //#include <cpu-features.h>
 
 #include "m64p_types.h"
